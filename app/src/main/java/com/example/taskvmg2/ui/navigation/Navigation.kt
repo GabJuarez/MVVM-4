@@ -8,5 +8,5 @@ object Splash
 object TaskList
 @Serializable
 data class TaskDetail(
-    val taskId : Int
+    val taskId : Int = -1
 )

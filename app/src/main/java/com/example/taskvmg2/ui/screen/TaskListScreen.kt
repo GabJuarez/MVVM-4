@@ -47,7 +47,7 @@ fun TaskListScreen(navController: NavController?,
         modifier = Modifier.fillMaxSize()
        ,floatingActionButton = {
            FloatingActionButton(onClick = {
-               navController?.navigate(TaskDetail)
+               navController?.navigate(TaskDetail(taskId = -1))
            }) {
                Icon(
                    imageVector = Icons.Default.Add,
