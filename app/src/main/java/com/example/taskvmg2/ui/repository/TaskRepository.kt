@@ -13,7 +13,7 @@ class TaskRepository {
 
     fun getTasks(): List<Task>  = tasks.toList()
 
-    fun addTask(task: Task) = tasks.add(task)
+    fun addTask(id: Int, title: String) = tasks.add(Task(id, title, false))
 
     fun getTaskId(id: Int): Task? = tasks.find { it.id == id }
 

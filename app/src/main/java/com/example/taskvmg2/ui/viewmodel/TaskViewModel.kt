@@ -51,8 +51,8 @@ class TaskViewModel : ViewModel() {
             }
         }
     }
-    fun addTask(task: Task) {
-        repository.addTask(task)
+    fun addTask(id: Int, title: String) {
+        repository.addTask(id, title)
         loadTask()
     }
     fun removeTask(task: Task) {
