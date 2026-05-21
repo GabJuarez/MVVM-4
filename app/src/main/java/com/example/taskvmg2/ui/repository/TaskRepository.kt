@@ -11,7 +11,7 @@ class TaskRepository {
            Task(5, "Task 5", false)
     )
 
-    fun getTasks(): List<Task>  = tasks
+    fun getTasks(): List<Task>  = tasks.toList()
 
     fun addTask(task: Task) = tasks.add(task)
 
@@ -25,5 +25,4 @@ class TaskRepository {
             tasks[index] = task.copy(completed = !task.completed)
         }
     }
-
 }

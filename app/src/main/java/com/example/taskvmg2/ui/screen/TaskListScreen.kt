@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -38,7 +39,7 @@ import com.example.taskvmg2.ui.navigation.TaskDetail
 import com.example.taskvmg2.ui.viewmodel.TaskViewModel
 
 @Composable
-fun TaskListScreen(navController: NavController,
+fun TaskListScreen(navController: NavController?,
                    viewModel: TaskViewModel = viewModel())
 {
 
@@ -46,7 +47,7 @@ fun TaskListScreen(navController: NavController,
         modifier = Modifier.fillMaxSize()
        ,floatingActionButton = {
            FloatingActionButton(onClick = {
-               navController.navigate(TaskDetail)
+               navController?.navigate(TaskDetail)
            }) {
                Icon(
                    imageVector = Icons.Default.Add,
@@ -56,50 +57,64 @@ fun TaskListScreen(navController: NavController,
        }
     )
     { padding ->
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Lista de tareas",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        if (viewModel.tasks.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ){
-                Text("No hay tareas registradas")
-            }
-        }
-        else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-                    .padding(padding)
-                    .padding(16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Lista de tareas",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
             )
-            {
-                items(viewModel.tasks.size)
+            Spacer(modifier = Modifier.height(16.dp))
+            if (viewModel.tasks.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No hay tareas registradas")
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                )
                 {
-                    Card(
-                        modifier = Modifier.padding(vertical = 8.dp)
-                            .fillMaxWidth()
-                    )
-                    {
-                        Row(
-                            modifier = Modifier.padding(2.dp).fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                            ,verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(viewModel.tasks[it].id.toString())
-                            Text(viewModel.tasks[it].title)
-                            Checkbox(
-                                checked = viewModel.tasks[it].completed,
-                                onCheckedChange = {}
-                            )
+                    items(viewModel.tasks.size) { index ->
+                        val task = viewModel.tasks[index]
+                        Card(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .fillMaxWidth()
+                        )
+                        {
+                            Row(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(task.id.toString())
+                                Text(task.title)
+                                Checkbox(
+                                    checked = task.completed,
+                                    onCheckedChange = {
+                                        viewModel.toggleTask(task)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewTaskListScreen() {
+    TaskListScreen(null)
 }
