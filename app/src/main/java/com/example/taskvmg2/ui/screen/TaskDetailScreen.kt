@@ -31,17 +31,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.taskvmg2.ui.model.Task
-import com.example.taskvmg2.ui.viewmodel.TaskViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.taskvmg2.ui.viewmodel.DetailViewModel
 
 @Composable
 fun TaskDetailScreen(
     navController: NavController,
     taskId: Int?,
-    viewModel: TaskViewModel = viewModel()
+    viewModel: DetailViewModel = viewModel()
 ) {
+    val taskState by viewModel.state.collectAsState()
+
     LaunchedEffect(taskId) {
-        viewModel.loadTask(taskId)
+        if (taskId != null && taskId != -1) {
+            viewModel.loadTask(taskId)
+        }
     }
     Column(
         modifier = Modifier
@@ -62,7 +67,7 @@ fun TaskDetailScreen(
                     .padding(20.dp)
             ) {
                 Text(
-                    text = "Información de la Tarea",
+                    text = if (taskId == null || taskId == -1) "Nueva Tarea" else "Editar Tarea",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -70,13 +75,14 @@ fun TaskDetailScreen(
                     modifier = Modifier.height(20.dp)
                 )
                 OutlinedTextField(
-                    value = viewModel.id,
+                    value = taskState.id?.toString() ?: "",
                     onValueChange = {
-                        viewModel.onIdChange(it)
+                        // El ID normalmente no se edita manualmente si es autogenerado,
+                        // pero lo dejamos como solo lectura o podrías añadir onIdChange en el VM
                     },
                     modifier = Modifier.fillMaxWidth(),
                     label = {
-                        Text("ID")
+                        Text("ID (Auto-generado)")
                     },
                     leadingIcon = {
                         Icon(
@@ -84,13 +90,14 @@ fun TaskDetailScreen(
                             contentDescription = null
                         )
                     },
-                    singleLine = true
+                    singleLine = true,
+                    enabled = false // Deshabilitado porque se genera solo
                 )
                 Spacer(
                     modifier = Modifier.height(16.dp)
                 )
                 OutlinedTextField(
-                    value = viewModel.title,
+                    value = taskState.title,
                     onValueChange = {
                         viewModel.onTitleChange(it)
                     },
@@ -133,10 +140,7 @@ fun TaskDetailScreen(
                     Button(
                        modifier = Modifier.weight(1f),
                        onClick = {
-                            viewModel.addTask(
-                                id = viewModel.id.toInt(),
-                                title = viewModel.title,
-                            )
+                            viewModel.saveTask()
                             navController.popBackStack()
                         }
                     ) {

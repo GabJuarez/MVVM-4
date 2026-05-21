@@ -10,6 +10,7 @@ import androidx.navigation.toRoute
 import com.example.taskvmg2.splash.SplashScreen
 import com.example.taskvmg2.ui.screen.TaskDetailScreen
 import com.example.taskvmg2.ui.screen.TaskListScreen
+import com.example.taskvmg2.ui.viewmodel.DetailViewModel
 import com.example.taskvmg2.ui.viewmodel.TaskViewModel
 
 @Composable
@@ -39,9 +40,10 @@ fun AppNavigation(modifier: Modifier)
 
         composable<TaskDetail>{ backStackEntry ->
             val route = backStackEntry.toRoute<TaskDetail>()
+            val detailViewModel: DetailViewModel = viewModel()
             TaskDetailScreen(navController = navController,
                 taskId = route.taskId,
-                viewModel = taskViewModel)
+                viewModel = detailViewModel)
         }
 
     }
