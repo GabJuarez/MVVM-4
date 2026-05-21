@@ -25,4 +25,8 @@ class TaskRepository {
             tasks[index] = task.copy(completed = !task.completed)
         }
     }
+    fun editTask(task : Task, editedTask: String){
+        val index = tasks.indexOf(task)
+        tasks[index]  = task.copy(title = editedTask)
+    }
 }
