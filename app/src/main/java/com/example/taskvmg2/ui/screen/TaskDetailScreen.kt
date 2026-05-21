@@ -134,11 +134,8 @@ fun TaskDetailScreen(
                        modifier = Modifier.weight(1f),
                        onClick = {
                             viewModel.addTask(
-                                Task(
-                                    id = viewModel.id.toInt(),
-                                    title = viewModel.title,
-                                    completed = viewModel.completed
-                                )
+                                id = viewModel.id.toInt(),
+                                title = viewModel.title,
                             )
                             navController.popBackStack()
                         }

@@ -13,7 +13,7 @@ class TaskRepository {
 
     fun getTasks(): List<Task>  = tasks.toList()
 
-    fun addTask(task: Task) = tasks.add(task)
+    fun addTask(id: Int, title: String) = tasks.add(Task(id, title, false))
 
     fun getTaskId(id: Int): Task? = tasks.find { it.id == id }
 
@@ -24,5 +24,9 @@ class TaskRepository {
         if (index != -1) {
             tasks[index] = task.copy(completed = !task.completed)
         }
+    }
+    fun editTask(task : Task, editedTask: String){
+        val index = tasks.indexOf(task)
+        tasks[index]  = task.copy(title = editedTask)
     }
 }
